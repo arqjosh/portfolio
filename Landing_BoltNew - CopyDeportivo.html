@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deport365 – Software de Administración para Gimnasios y Centros Deportivos</title>
+  <meta name="description" content="Deport365 centraliza clientes, cobros, accesos y membresías de tu gimnasio en una sola plataforma. Controla tu operación, reduce la cartera vencida y crece con datos reales." />
+  <meta name="keywords" content="software gimnasio, administración gym, control accesos gym, membresías deportivas, sistema cobros gimnasio, software centro deportivo Mexico" />
+  <meta name="robots" content="index, follow" />
+  <link rel="icon" type="image/png" href="https://github.com/user-attachments/assets/2779d68e-a370-439e-b3c1-adf90145886f" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Deport365 – Control total para tu gimnasio" />
+  <meta property="og:description" content="Administra clientes, cobros, accesos y sucursales desde una sola plataforma. Cada día cuenta." />
+  <meta property="og:image" content="https://github.com/user-attachments/assets/2779d68e-a370-439e-b3c1-adf90145886f" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Deport365 – Control total para tu gimnasio" />
+  <meta name="twitter:description" content="Administra clientes, cobros, accesos y sucursales desde una sola plataforma." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: '#D4FF00',
+            graphite: '#2A2A2A',
+            muted: '#7A7A7A',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --brand: #D4FF00;
+      --brand-dim: rgba(212,255,0,0.1);
+      --brand-border: rgba(212,255,0,0.25);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body { background: #000; color: #fff; font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Selection */
+    ::selection { background: var(--brand); color: #000; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 3px; }
+
+    /* Scroll animations */
+    .anim { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .anim.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 80ms; }
+    .d2 { transition-delay: 160ms; }
+    .d3 { transition-delay: 240ms; }
+    .d4 { transition-delay: 320ms; }
+    .d5 { transition-delay: 400ms; }
+    .d6 { transition-delay: 480ms; }
+
+    /* Grid background */
+    .grid-bg { background-image: linear-gradient(rgba(212,255,0,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(212,255,0,.025) 1px, transparent 1px); background-size: 64px 64px; }
+
+    /* Buttons */
+    .btn-p { display:inline-flex; align-items:center; gap:.5rem; background:var(--brand); color:#000; font-weight:800; padding:.75rem 1.5rem; border-radius:9999px; border:none; cursor:pointer; transition:filter .2s, transform .15s; text-decoration:none; font-size:.9rem; }
+    .btn-p:hover { filter:brightness(1.1); transform:scale(1.04); }
+    .btn-s { display:inline-flex; align-items:center; gap:.5rem; border:1px solid rgba(255,255,255,.25); color:#fff; font-weight:600; padding:.75rem 1.5rem; border-radius:9999px; background:transparent; cursor:pointer; transition:border-color .2s, color .2s; text-decoration:none; font-size:.9rem; }
+    .btn-s:hover { border-color:var(--brand); color:var(--brand); }
+
+    /* Eyebrow chips */
+    .chip { display:inline-flex; align-items:center; gap:.4rem; background:var(--brand-dim); border:1px solid var(--brand-border); color:var(--brand); font-size:.7rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; padding:.35rem .9rem; border-radius:9999px; }
+
+    /* Feature/Profile cards */
+    .card { background:#0d0d0d; border:1px solid rgba(255,255,255,.08); border-radius:1rem; transition:border-color .3s; }
+    .card:hover { border-color:rgba(212,255,0,.25); }
+    .icon-box { width:2.5rem; height:2.5rem; border-radius:.7rem; background:var(--brand-dim); display:flex; align-items:center; justify-content:center; }
+
+    /* Tabs */
+    .tab-btn { padding:.6rem 1.2rem; border-radius:9999px; font-weight:700; font-size:.83rem; border:none; cursor:pointer; transition:background .2s, color .2s; }
+    .tab-btn.active { background:var(--brand); color:#000; }
+    .tab-btn:not(.active) { background:rgba(255,255,255,.06); color:rgba(255,255,255,.55); }
+    .tab-btn:not(.active):hover { color:#fff; background:rgba(255,255,255,.12); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* Accordion */
+    .acc-btn { width:100%; text-align:left; background:transparent; border:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1.2rem 1.5rem; color:#fff; font-family:inherit; font-size:.9rem; font-weight:600; }
+    .acc-item { border:1px solid rgba(255,255,255,.08); border-radius:.9rem; overflow:hidden; background:#0a0a0a; transition:border-color .3s; }
+    .acc-item.open { border-color:rgba(212,255,0,.3); background:#0d0d0d; }
+    .acc-icon { color:var(--brand); flex-shrink:0; transition:transform .3s; width:18px; height:18px; }
+    .acc-item.open .acc-icon { transform:rotate(180deg); }
+    .acc-body { max-height:0; overflow:hidden; transition:max-height .35s ease; }
+    .acc-item.open .acc-body { max-height:500px; }
+
+    /* Pricing scroll */
+    .pricing-scroll { display:flex; gap:2rem; overflow-x:auto; padding-top:1.5rem; padding-bottom:1rem; scrollbar-width:thin; scrollbar-color: var(--brand) #000; }
+    .pricing-scroll::-webkit-scrollbar { height:4px; }
+    .pricing-scroll::-webkit-scrollbar-thumb { background:var(--brand); border-radius:3px; }
+    .plan-card { flex-shrink:0; width:190px; border-radius:1.1rem; padding:1.3rem 1.1rem; border:1px solid rgba(255,255,255,.1); background:#0d0d0d; display:flex; flex-direction:column; gap:.75rem; transition:border-color .3s; }
+    .plan-card:hover:not(.recommended) { border-color:rgba(255,255,255,.2); }
+    .plan-card.recommended { border-color:var(--brand); background:#111; box-shadow:0 0 40px rgba(212,255,0,.08); transform:scale(1.04); }
+    .plan-card.popular { border-color:rgba(255,255,255,.2); }
+
+    /* Form inputs */
+    .inp { width:100%; background:#1a1a1a; border:1px solid rgba(255,255,255,.1); border-radius:.75rem; padding:.85rem 1rem .85rem 2.75rem; font-size:.875rem; color:#fff; font-family:inherit; outline:none; transition:border-color .2s; }
+    .inp::placeholder { color:rgba(255,255,255,.25); }
+    .inp:focus { border-color:rgba(212,255,0,.5); }
+    .inp-icon { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); color:rgba(255,255,255,.3); width:16px; height:16px; }
+
+    /* Navbar scroll */
+    #navbar { position:fixed; top:0; left:0; right:0; z-index:100; transition:background .3s, border-color .3s, padding .3s; padding:1.2rem 0; }
+    #navbar.scrolled { background:rgba(0,0,0,.95); backdrop-filter:blur(14px); border-bottom:1px solid rgba(255,255,255,.1); padding:.75rem 0; }
+
+    /* Mobile menu */
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:block; }
+
+    /* Chart bars */
+    .bar { border-radius:3px 3px 0 0; transition:height .8s ease; }
+
+    /* SVG icons inline helpers */
+    svg { display:inline-block; vertical-align:middle; }
+  </style>
+</head>
+<body>
+
+<!-- =========================================================
+  NAVBAR
+  ========================================================= -->
+<header id="navbar" role="banner">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
+    <!-- Logo -->
+    <a href="#inicio" class="flex items-center gap-2.5 flex-shrink-0" aria-label="Deport365 – Inicio">
+      <img src="https://github.com/user-attachments/assets/2779d68e-a370-439e-b3c1-adf90145886f" alt="Deport365" class="h-9 w-auto" />
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-1" aria-label="Navegación principal">
+      <a href="#funcionalidades" class="nav-link px-4 py-2 text-sm font-medium text-white/60 hover:text-white rounded-full transition-colors hover:bg-white/5">Funcionalidades</a>
+      <a href="#perfiles" class="nav-link px-4 py-2 text-sm font-medium text-white/60 hover:text-white rounded-full transition-colors hover:bg-white/5">Perfiles</a>
+      <a href="#beneficios" class="nav-link px-4 py-2 text-sm font-medium text-white/60 hover:text-white rounded-full transition-colors hover:bg-white/5">Beneficios</a>
+      <a href="#precios" class="nav-link px-4 py-2 text-sm font-medium text-white/60 hover:text-white rounded-full transition-colors hover:bg-white/5">Precios</a>
+      <a href="#faq" class="nav-link px-4 py-2 text-sm font-medium text-white/60 hover:text-white rounded-full transition-colors hover:bg-white/5">FAQ</a>
+    </nav>
+
+    <div class="hidden md:flex items-center">
+      <a href="#contacto" class="btn-p text-sm">Mandar Whats</a>
+    </div>
+
+    <!-- Hamburger -->
+    <button id="menu-btn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="Abrir menú" aria-expanded="false">
+      <svg id="icon-menu" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="icon-close" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden bg-black/98 border-t border-white/10 px-4 py-4 space-y-1" aria-label="Menú móvil">
+    <a href="#funcionalidades" class="mobile-link block px-4 py-3 text-white/80 hover:text-white font-medium rounded-xl hover:bg-white/5 transition-colors">Funcionalidades</a>
+    <a href="#perfiles" class="mobile-link block px-4 py-3 text-white/80 hover:text-white font-medium rounded-xl hover:bg-white/5 transition-colors">Perfiles</a>
+    <a href="#beneficios" class="mobile-link block px-4 py-3 text-white/80 hover:text-white font-medium rounded-xl hover:bg-white/5 transition-colors">Beneficios</a>
+    <a href="#precios" class="mobile-link block px-4 py-3 text-white/80 hover:text-white font-medium rounded-xl hover:bg-white/5 transition-colors">Precios</a>
+    <a href="#faq" class="mobile-link block px-4 py-3 text-white/80 hover:text-white font-medium rounded-xl hover:bg-white/5 transition-colors">FAQ</a>
+    <div class="pt-3"><a href="#contacto" class="mobile-link btn-p w-full justify-center">Mandar Whats</a></div>
+  </div>
+</header>
+
+
+<!-- =========================================================
+  HERO
+  ========================================================= -->
+<main>
+<section id="inicio" class="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20 grid-bg">
+  <!-- Glow -->
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(212,255,0,.06) 0%, transparent 70%);" aria-hidden="true"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 py-10 lg:py-16">
+    <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+      <!-- Left: copy -->
+      <div class="space-y-7">
+        <div class="chip anim">
+          <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Software de Negocios Deportivos
+        </div>
+
+        <h1 class="anim d1 text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.95] tracking-tight">
+          Entrenar exige<br>método, tu<br>
+          <span style="color:var(--brand);">GYM también.</span>
+        </h1>
+
+        <p class="anim d2 text-lg text-white/55 leading-relaxed max-w-lg">
+          Sin disciplina no hay resultados. Y tú, ¿podrías disciplinar tu negocio si no controlas clientes, cobros, accesos y membresías? Deport365 es lo que necesitas para lograr el crecimiento.
+        </p>
+
+        <div class="anim d3 flex flex-wrap gap-4">
+          <a href="#contacto" class="btn-p text-base">
+            Mandar Whats
+            <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#funcionalidades" class="btn-s text-base">Ver funcionalidades</a>
+        </div>
+
+        <div class="anim d4 flex flex-wrap gap-6 pt-1">
+          <div class="flex items-center gap-2 text-white/45 text-sm">
+            <svg width="14" height="14" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Multi-sucursal
+          </div>
+          <div class="flex items-center gap-2 text-white/45 text-sm">
+            <svg width="14" height="14" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            Acceso por QR
+          </div>
+          <div class="flex items-center gap-2 text-white/45 text-sm">
+            <svg width="14" height="14" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            Reportes en tiempo real
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Dashboard mockup -->
+      <div class="anim d2 relative">
+        <div class="relative bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl" style="box-shadow:0 30px 80px rgba(0,0,0,.5);">
+          <!-- Window bar -->
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-[#1a1a1a]">
+            <div class="flex gap-1.5">
+              <span class="w-3 h-3 rounded-full" style="background:#FF5F57;"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#FEBC2E;"></span>
+              <span class="w-3 h-3 rounded-full" style="background:#28C840;"></span>
+            </div>
+            <span class="flex-1 text-center text-xs text-white/25 font-mono">deport365.com/admin</span>
+          </div>
+          <!-- Body -->
+          <div class="flex">
+            <!-- Sidebar -->
+            <div class="hidden sm:flex flex-col w-40 bg-black/60 border-r border-white/5 p-3 gap-1">
+              <div class="px-3 py-1.5 text-[9px] text-white/25 font-bold uppercase tracking-wider mb-1">Panel</div>
+              <div class="px-3 py-2 rounded-lg text-xs font-semibold" style="background:var(--brand);color:#000;">Dashboard</div>
+              <div class="px-3 py-2 rounded-lg text-xs text-white/35">Clientes</div>
+              <div class="px-3 py-2 rounded-lg text-xs text-white/35">Cobros</div>
+              <div class="px-3 py-2 rounded-lg text-xs text-white/35">Accesos</div>
+              <div class="px-3 py-2 rounded-lg text-xs text-white/35">Reportes</div>
+              <div class="px-3 py-2 rounded-lg text-xs text-white/35">Sucursales</div>
+            </div>
+            <!-- Content -->
+            <div class="flex-1 p-4 space-y-3">
+              <!-- KPIs -->
+              <div class="grid grid-cols-2 gap-2.5">
+                <div class="bg-[#1a1a1a] border border-white/5 rounded-xl p-3">
+                  <div class="text-[9px] text-white/35 mb-1">Socios activos</div>
+                  <div class="text-lg font-black text-white">247</div>
+                  <div class="text-[9px] font-bold mt-0.5" style="color:var(--brand);">+12%</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-white/5 rounded-xl p-3">
+                  <div class="text-[9px] text-white/35 mb-1">Ingresos mes</div>
+                  <div class="text-lg font-black text-white">$48,200</div>
+                  <div class="text-[9px] font-bold mt-0.5" style="color:var(--brand);">+8%</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-white/5 rounded-xl p-3">
+                  <div class="text-[9px] text-white/35 mb-1">Accesos hoy</div>
+                  <div class="text-lg font-black text-white">134</div>
+                  <div class="text-[9px] font-bold mt-0.5" style="color:var(--brand);">En vivo</div>
+                </div>
+                <div class="bg-[#1a1a1a] border border-white/5 rounded-xl p-3">
+                  <div class="text-[9px] text-white/35 mb-1">Cartera vencida</div>
+                  <div class="text-lg font-black text-white">18</div>
+                  <div class="text-[9px] font-bold mt-0.5 text-yellow-400">-5%</div>
+                </div>
+              </div>
+              <!-- Mini chart -->
+              <div class="bg-[#1a1a1a] border border-white/5 rounded-xl p-3">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[9px] text-white/35">Ingresos — últimos 7 días</span>
+                  <span class="text-[9px] font-bold" style="color:var(--brand);">MXN</span>
+                </div>
+                <div class="flex items-end gap-1.5 h-12">
+                  <div class="bar flex-1 rounded" style="height:55%;background:rgba(212,255,0,.2);"></div>
+                  <div class="bar flex-1 rounded" style="height:70%;background:rgba(212,255,0,.2);"></div>
+                  <div class="bar flex-1 rounded" style="height:45%;background:rgba(212,255,0,.2);"></div>
+                  <div class="bar flex-1 rounded" style="height:85%;background:rgba(212,255,0,.2);"></div>
+                  <div class="bar flex-1 rounded" style="height:65%;background:rgba(212,255,0,.2);"></div>
+                  <div class="bar flex-1 rounded" style="height:90%;background:var(--brand);"></div>
+                  <div class="bar flex-1 rounded" style="height:78%;background:rgba(212,255,0,.2);"></div>
+                </div>
+              </div>
+              <!-- Recent -->
+              <div class="bg-[#1a1a1a] border border-white/5 rounded-xl overflow-hidden">
+                <div class="px-3 py-2 border-b border-white/5 text-[9px] text-white/30 font-bold uppercase">Socios recientes</div>
+                <div class="divide-y divide-white/5">
+                  <div class="flex items-center justify-between px-3 py-2"><span class="text-[10px] text-white/60">María López</span><span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-500/15 text-green-400">Al corriente</span></div>
+                  <div class="flex items-center justify-between px-3 py-2"><span class="text-[10px] text-white/60">Carlos Ruiz</span><span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-red-400">Vencido</span></div>
+                  <div class="flex items-center justify-between px-3 py-2"><span class="text-[10px] text-white/60">Ana Torres</span><span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400">Clase muestra</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating badge -->
+        <div class="absolute -bottom-4 -left-4 rounded-xl px-4 py-2.5 shadow-lg" style="background:var(--brand);color:#000;box-shadow:0 8px 30px rgba(212,255,0,.25);">
+          <div class="text-xs font-black">Acceso QR</div>
+          <div class="text-[10px] font-medium opacity-70">Validación instantánea</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Bottom fade -->
+  <div class="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style="background:linear-gradient(to top, #000, transparent);" aria-hidden="true"></div>
+</section>
+
+
+<!-- =========================================================
+  PROBLEMA
+  ========================================================= -->
+<section class="py-10 lg:py-6" style="background:linear-gradient(180deg,#000 0%,#05050a 100%);">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mb-16">
+      <div class="chip anim" style="background:rgba(255,59,48,.1);border-color:rgba(255,59,48,.25);color:#FF6B6B;">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        El dolor que NO sirve
+      </div>
+      <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+        La mayoría de los<br>negocios entrenan <span class="text-red-400">sin plan.</span>
+      </h2>
+      <p class="anim d2 mt-4 text-white/50 text-lg leading-relaxed">
+        No es que pierdas dinero con cobros informales o gente colada. El verdadero peligro es ignorar la todalidad de tu negocio — como entrenar sin medir tiempos ni contar repeticiones -
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <article class="card anim d1 p-6">
+        <div class="icon-box mb-5" style="background:rgba(255,59,48,.1);">
+          <svg width="18" height="18" fill="none" stroke="#FF6B6B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Accesos sin control</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Socios con la membresía vencida que siguen entrando como si nada, porque nadie está revisando las tarjetas amarillas. Cada acceso sin cobro es un gol en tu contra.</p>
+      </article>
+      <article class="card anim d2 p-6">
+        <div class="icon-box mb-5" style="background:rgba(255,59,48,.1);">
+          <svg width="18" height="18" fill="none" stroke="#FF6B6B" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Cartera vencida que crece</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Sin saber quién debe y cuánto, la cobranza se vuelve puro "le marco luego". Los adeudos se acumulan y te dejan sin aire para seguir operando.</p>
+      </article>
+      <article class="card anim d3 p-6">
+        <div class="icon-box mb-5" style="background:rgba(255,59,48,.1);">
+          <svg width="18" height="18" fill="none" stroke="#FF6B6B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Recepción que frena el negocio</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Papelitos, Excel, WhatsApp. Tu equipo pierde minutos valiosos resolviendo dudas que deberían responderse en lo que duran 2 repeticiones.</p>
+      </article>
+      <article class="card anim d4 p-6">
+        <div class="icon-box mb-5" style="background:rgba(255,59,48,.1);">
+          <svg width="18" height="18" fill="none" stroke="#FF6B6B" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Operas sin información real</h3>
+        <p class="text-sm text-white/40 leading-relaxed">No sabes qué servicio te deja más margen ni qué socios están a punto de darse de baja. Decides a ciegas, como entrenar tu cardio nomás "sintiéndote cansado", sin reloj ni pulsómetro.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  SOLUCIÓN
+  ========================================================= -->
+<section class="py-10 lg:py-6 bg-black relative overflow-hidden">
+  <div class="absolute top-0 right-0 w-96 h-96 rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(212,255,0,.05) 0%, transparent 70%); transform:translate(33%,-25%);" aria-hidden="true"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Left -->
+      <div>
+        <div class="chip anim">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          El plan de juego
+        </div>
+        <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+          Deport365 le pone estrategia a tu<br>
+          <span style="color:var(--brand);">operación diaria.</span>
+        </h2>
+        <p class="anim d2 mt-5 text-white/50 text-lg leading-relaxed">
+          No es solo controlar accesos. Es el cuerpo técnico completo de tu negocio — desde que vendes una membresía hasta el reporte del mes — para que siempre sepas en qué posición vas.
+        </p>
+        <ul class="anim d3 mt-8 space-y-3">
+          <li class="flex items-start gap-3">
+            <svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-white/65 text-sm">Baja tu cartera vencida hasta 60%</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-white/65 text-sm">Cero colados: se acaban los accesos sin pagar</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-white/65 text-sm">Decide con datos, no por corazonada</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="text-white/65 text-sm">Tu recepción podrá dedicarse a vender otros artículos</span>
+          </li>
+        </ul>
+        <div class="anim d4 mt-9">
+          <a href="#contacto" class="btn-p">
+            Quiero ver cómo funciona
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+      <!-- Right: pillars -->
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="card anim d1 p-5">
+          <div class="text-5xl font-black leading-none mb-4" style="color:rgba(212,255,0,.15);">01</div>
+          <h3 class="text-sm font-bold text-white mb-2">Inteligencia Financiera</h3>
+          <p class="text-xs text-white/40 leading-relaxed">Reportes de ingresos por sucursal, servicio y plan. Sabes qué te da margen real, como tener coach 24/7 pero para tu negocio.</p>
+        </div>
+        <div class="card anim d2 p-5">
+          <div class="text-5xl font-black leading-none mb-4" style="color:rgba(212,255,0,.15);">02</div>
+          <h3 class="text-sm font-bold text-white mb-2">Control de Acceso</h3>
+          <p class="text-xs text-white/40 leading-relaxed">QR por socio. Si ya tienes torniquetes, se integra; si no, con una tablet basta para tener validación automática contra membresía activa.</p>
+        </div>
+        <div class="card anim d3 p-5">
+          <div class="text-5xl font-black leading-none mb-4" style="color:rgba(212,255,0,.15);">03</div>
+          <h3 class="text-sm font-bold text-white mb-2">Cobranza Automatizada</h3>
+          <p class="text-xs text-white/40 leading-relaxed">Cartera visible en tiempo real. Detectas socios próximos a vencer, registras abonos, aplicas descuentos y entregas el recibo en pocos clics.</p>
+        </div>
+        <div class="card anim d4 p-5">
+          <div class="text-5xl font-black leading-none mb-4" style="color:rgba(212,255,0,.15);">04</div>
+          <h3 class="text-sm font-bold text-white mb-2">Portal del Socio</h3>
+          <p class="text-xs text-white/40 leading-relaxed">Cada socio ve su estado de cuenta, sus servicios activos y su historial desde el celular. Menos llamadas para ti, más autonomía para él.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  FUNCIONALIDADES
+  ========================================================= -->
+<section id="funcionalidades" class="py-10 lg:py-6 grid-bg" style="background-color:#050505;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mb-14">
+      <div class="chip anim">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Funcionalidades
+      </div>
+      <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+        Todo lo que tu gimnasio<br><span style="color:var(--brand);">necesita para crecer.</span>
+      </h2>
+      <p class="anim d2 mt-4 text-white/50 text-lg leading-relaxed">
+        Cada función resuelve un problema real de operación, cobranza o crecimiento. Nada de funciones de adorno.
+      </p>
+    </div>
+
+    <!-- Category tabs -->
+    <div class="flex flex-wrap gap-2 mb-10 anim d3" role="tablist" aria-label="Categorías de funcionalidades">
+      <button class="tab-btn active" onclick="switchFeatureTab(this,'feat-operacion')" role="tab" aria-selected="true">Operación</button>
+      <button class="tab-btn" onclick="switchFeatureTab(this,'feat-cobranza')" role="tab" aria-selected="false">Cobranza</button>
+      <button class="tab-btn" onclick="switchFeatureTab(this,'feat-accesos')" role="tab" aria-selected="false">Accesos</button>
+      <button class="tab-btn" onclick="switchFeatureTab(this,'feat-reportes')" role="tab" aria-selected="false">Reportes</button>
+    </div>
+
+    <!-- Tab panels -->
+    <div id="feat-operacion" class="tab-panel active">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article class="card p-6 anim">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Gestión de sucursales</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Alta, edición y control de todas tus sedes desde un solo panel. Cada sucursal con sus propios accesos, personal y reportes, como sedes de un mismo equipo.</p>
+        </article>
+        <article class="card p-6 anim d1">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Directorio de clientes</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Ficha completa del socio: datos personales, contacto de emergencia, salud, tutor para menores y reglamento aceptado. Todo en un mismo expediente.</p>
+        </article>
+        <article class="card p-6 anim d2">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Gestión de recepcionistas</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Crea usuarios con acceso limitado a su sucursal. Cada movimiento queda registrado, como quien lleva su propia cuenta.</p>
+        </article>
+        <article class="card p-6 anim d3">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Servicios y horarios</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Servicios recurrentes o de una sola vez, vigencias, horarios semanales y eventos por fecha. Arma tu calendario exactamente como lo necesitas.</p>
+        </article>
+        <article class="card p-6 anim d4">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Planes de membresía</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Mensualidad, pago por clase, número de clases a la semana o acceso libre. Combina planes según cada servicio que ofrezcas.</p>
+        </article>
+        <article class="card p-6 anim d5">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Clases muestra/Visitas</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Registra prospectos en tus horarios para darles seguimiento. Convierte esa visita de prueba en un socio recurrente.</p>
+        </article>
+      </div>
+    </div>
+
+    <div id="feat-cobranza" class="tab-panel">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article class="card p-6 anim">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Cobros y suscripciones</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Alta de suscripciones por cliente, plan y fecha de pago. Historial completo de cada cargo, descuento y recibo, sin andar buscando en papelitos.</p>
+        </article>
+        <article class="card p-6 anim d1">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Pago por clase</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Cobro rápido para quien no trae mensualidad o solo consume clases sueltas. Sin fricción en la ventanilla.</p>
+        </article>
+        <article class="card p-6 anim d2">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Cartera por cobrar</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Cobro rápido para quien no trae mensualidad o solo consume clases sueltas. Sin fricción en la ventanilla.</p>
+        </article>
+        <article class="card p-6 anim d3">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Descuentos y condonaciones</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Aplica excepciones con control: descuentos o condonaciones con registro de quién, cuándo y por qué. Todo lleva su registro.</p>
+        </article>
+      </div>
+    </div>
+
+    <div id="feat-accesos" class="tab-panel">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article class="card p-6 anim">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Control de acceso por QR</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Cada socio genera su QR desde el portal. El sistema valida membresía activa, horario y estado de pago antes de dejarlo pasar.</p>
+        </article>
+        <article class="card p-6 anim d1">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Validación automática</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Ningún socio con adeudo o membresía vencida pasa sin que el sistema lo marque. Reglas claras, cero discusiones en la entrada.</p>
+        </article>
+        <article class="card p-6 anim d2">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Historial de accesos</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Registro completo por sucursal: quién entró, a qué servicio, en qué horario y con qué resultado.</p>
+        </article>
+        <article class="card p-6 anim d3">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Registro manual</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Cuando el QR falla, tu recepcionista registra el acceso a mano, con la misma trazabilidad de siempre.</p>
+        </article>
+      </div>
+    </div>
+
+    <div id="feat-reportes" class="tab-panel">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article class="card p-6 anim">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Ingresos por filtros</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Analiza rentabilidad por fechas, sucursal, servicio, plan y método de pago. Identifica cuáles son tus jugadores estrella y cuáles ya no rinden.</p>
+        </article>
+        <article class="card p-6 anim d1">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Indicadores en tiempo real</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Socios activos, accesos del día, cartera vencida y servicios vigentes. Todo en tu marcador al abrir sesión.</p>
+        </article>
+        <article class="card p-6 anim d2">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Portal del socio</h3>
+          <p class="text-sm text-white/40 leading-relaxed">El cliente ve sus servicios, su estado de pago, su historial y genera su QR desde el celular. Sin llamadas, sin dudas.</p>
+        </article>
+        <article class="card p-6 anim d3">
+          <div class="icon-box mb-5"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+          <h3 class="text-base font-bold text-white mb-2">Configuración avanzada</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Adapta la plataforma a tu operación: sucursales, personal, servicios y planes, configurados a tu medida, como tu propia rutina de entrenamiento.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  PERFILES
+  ========================================================= -->
+<section id="perfiles" class="py-10 lg:py-6 bg-black relative overflow-hidden">
+  <div class="absolute left-0 top-1/2 w-96 h-96 rounded-full pointer-events-none" style="background:radial-gradient(circle, rgba(212,255,0,.04) 0%, transparent 70%); transform:translate(-50%,-50%);" aria-hidden="true"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="max-w-2xl mb-14">
+      <div class="chip anim">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Perfiles de usuario
+      </div>
+      <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+        Cada quien juega<br><span style="color:var(--brand);">en su propia cancha.</span>
+      </h2>
+      <p class="anim d2 mt-4 text-white/50 text-lg leading-relaxed">
+        Dueño/Administrador, Recepcionistas, Socios — cada uno con acceso a lo que le toca. Tú diriges, recepción ejecuta y para el socio es su llave.
+      </p>
+    </div>
+
+    <!-- Profile tabs -->
+    <div class="flex flex-wrap gap-3 mb-10 anim d3" role="tablist" aria-label="Perfiles de usuario">
+      <button class="tab-btn active" onclick="switchProfileTab(this,'prof-admin')" role="tab" aria-selected="true">Administrador</button>
+      <button class="tab-btn" onclick="switchProfileTab(this,'prof-recep')" role="tab" aria-selected="false">Recepcionista</button>
+      <button class="tab-btn" onclick="switchProfileTab(this,'prof-socio')" role="tab" aria-selected="false">Socio</button>
+    </div>
+
+    <!-- Admin -->
+    <div id="prof-admin" class="tab-panel active">
+      <div class="grid lg:grid-cols-5 gap-6">
+        <div class="lg:col-span-3 bg-[#111] border border-white/8 rounded-2xl p-8 anim">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="icon-box w-12 h-12 flex-shrink-0">
+              <svg width="22" height="22" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-white mb-1">Visión completa del negocio</h3>
+              <p class="text-white/40 text-sm leading-relaxed">Controlas configuración, finanzas y operación. Los rayos X de tu negocio, con todos los números completos.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-7">
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Configuración</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Cobranza</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Reportes</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Sucursales</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Accesos</span>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Gestiona sucursales, servicios, planes y recepcionistas</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Revisa cartera vencida e ingresos con filtros avanzados</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Configura planes de membresía y precios por servicio</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Cancela, condona o aplica descuentos con trazabilidad</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Consulta el desempeño financiero en tiempo real</span></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2 bg-[#0d0d0d] border border-white/8 rounded-2xl overflow-hidden anim d2">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#111]">
+            <div class="flex gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500/40"></span></div>
+            <span class="text-[11px] text-white/25 ml-2">Vista: Administrador</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Ingresos del mes</span><span class="text-xs font-bold" style="color:var(--brand);">$48,200 MXN</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Socios al corriente</span><span class="text-xs font-bold text-green-400">229 / 247</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Cartera vencida</span><span class="text-xs font-bold text-yellow-400">18 socios</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Accesos hoy</span><span class="text-xs font-bold text-white/70">134</span></div>
+          </div>
+          <div class="px-5 pb-5">
+            <div class="rounded-xl p-4 text-center" style="background:var(--brand-dim);border:1px solid var(--brand-border);">
+              <div class="text-xs font-bold" style="color:var(--brand);">Acceso total</div>
+              <div class="text-[11px] text-white/30 mt-0.5">Configuración, finanzas y operación completa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recepcionista -->
+    <div id="prof-recep" class="tab-panel">
+      <div class="grid lg:grid-cols-5 gap-6">
+        <div class="lg:col-span-3 bg-[#111] border border-white/8 rounded-2xl p-8 anim">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="icon-box w-12 h-12 flex-shrink-0">
+              <svg width="22" height="22" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-white mb-1">Atención rápida en mostrador</h3>
+              <p class="text-white/40 text-sm leading-relaxed">Opera el día a día: registra altas, cobra, valida accesos, sin meterse a la configuración general del negocio.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-7">
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Cobros</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Accesos</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Clientes</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Pagos</span>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Busca clientes y accede a su perfil en segundos</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Registra nuevos socios con datos completos</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Cobra mensualidades, clases individuales y genera recibos</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Valida acceso por QR o token corto</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Registra clases muestra de prospectos</span></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2 bg-[#0d0d0d] border border-white/8 rounded-2xl overflow-hidden anim d2">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#111]">
+            <div class="flex gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500/40"></span></div>
+            <span class="text-[11px] text-white/25 ml-2">Vista: Recepcionista</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Socios en espera</span><span class="text-xs font-bold text-white/70">3</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Cobros del turno</span><span class="text-xs font-bold" style="color:var(--brand);">$4,500 MXN</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Accesos validados</span><span class="text-xs font-bold text-green-400">47</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Clases muestra</span><span class="text-xs font-bold text-white/70">2</span></div>
+          </div>
+          <div class="px-5 pb-5">
+            <div class="rounded-xl p-4 text-center" style="background:var(--brand-dim);border:1px solid var(--brand-border);">
+              <div class="text-xs font-bold" style="color:var(--brand);">Acceso limitado</div>
+              <div class="text-[11px] text-white/30 mt-0.5">Solo funciones operativas del turno</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Socio -->
+    <div id="prof-socio" class="tab-panel">
+      <div class="grid lg:grid-cols-5 gap-6">
+        <div class="lg:col-span-3 bg-[#111] border border-white/8 rounded-2xl p-8 anim">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="icon-box w-12 h-12 flex-shrink-0">
+              <svg width="22" height="22" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-black text-white mb-1">Autoservicio transparente</h3>
+              <p class="text-white/40 text-sm leading-relaxed">Portal personal para revisar membresías, estado de cuenta e historial, sin depender de Recepción.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mb-7">
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">QR</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Mis pagos</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Servicios</span>
+            <span class="text-xs font-bold px-3 py-1 rounded-full" style="background:var(--brand-dim);border:1px solid var(--brand-border);color:var(--brand);">Historial</span>
+          </div>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Consulta sus servicios activos y fechas de vigencia</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Revisa cargos pendientes, vencidos y pagados</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Genera su código QR de acceso desde el celular</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Accede a su historial de entradas por servicio</span></li>
+            <li class="flex items-start gap-3"><svg width="16" height="16" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24" class="flex-shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"/></svg><span class="text-sm text-white/65">Siempre sabe cuánto debe y cuándo paga</span></li>
+          </ul>
+        </div>
+        <div class="lg:col-span-2 bg-[#0d0d0d] border border-white/8 rounded-2xl overflow-hidden anim d2">
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#111]">
+            <div class="flex gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500/40"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500/40"></span></div>
+            <span class="text-[11px] text-white/25 ml-2">Vista: Socio</span>
+          </div>
+          <div class="p-5 space-y-3">
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Membresía activa</span><span class="text-xs font-bold text-green-400">Funcional MX</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Próximo pago</span><span class="text-xs font-bold text-yellow-400">15 Jul — $900</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Accesos este mes</span><span class="text-xs font-bold text-white/70">18 entradas</span></div>
+            <div class="flex items-center justify-between bg-[#1a1a1a] rounded-xl px-4 py-3"><span class="text-xs text-white/45">Estado de cuenta</span><span class="text-xs font-bold text-green-400">Al corriente</span></div>
+          </div>
+          <div class="px-5 pb-5">
+            <div class="rounded-xl p-4 text-center" style="background:var(--brand-dim);border:1px solid var(--brand-border);">
+              <div class="text-xs font-bold" style="color:var(--brand);">Solo su información</div>
+              <div class="text-[11px] text-white/30 mt-0.5">Portal privado del socio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+  BENEFICIOS
+  ========================================================= -->
+<section id="beneficios" class="py-10 lg:py-6" style="background-color:#050505;">
+  <div class="absolute right-0 w-96 h-96 pointer-events-none" style="background:radial-gradient(circle, rgba(212,255,0,.04) 0%, transparent 70%); transform:translate(33%,0);" aria-hidden="true"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <div class="chip anim inline-flex">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        Impacto real
+      </div>
+      <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+        Los resultados que sí<br><span style="color:var(--brand);">verás en tu negocio.</span>
+      </h2>
+      <p class="anim d2 mt-4 text-white/50 text-lg leading-relaxed">
+        Con Deport365 no obtienes botones. Obtienes el control que necesitas para que tu negocio rinda más, con el mismo equipo.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <article class="card anim p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">-60%</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">-60%</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Cartera vencida reducida</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Con visibilidad real de quién debe y cuánto, la cobranza deja de ser "te marco luego" y el flujo de caja mejora desde el primer mes.</p>
+      </article>
+      <article class="card anim d1 p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">2x</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">2x</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Más socios atendidos por turno</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Recepción deja de buscar en hojas de Excel. Con directorio y estado de pago a un clic, atienden el doble en el mismo tiempo.</p>
+      </article>
+      <article class="card anim d2 p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">100%</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">100%</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Accesos controlados</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Ningún socio entra sin membresía vigente. El QR valida en segundos y el historial queda grabado por si lo necesitas revisar.</p>
+      </article>
+      <article class="card anim d3 p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">+35%</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">+35%</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Decisiones con datos reales</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Reportes filtrados por fecha, sucursal y servicio te dicen exactamente qué te genera rentabilidad y qué necesita ajuste.</p>
+      </article>
+      <article class="card anim d4 p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">∞</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">∞</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Sucursales sin límite</h3>
+        <p class="text-sm text-white/40 leading-relaxed">Opera una o veinte ubicaciones desde el mismo panel. Sin costos adicionales por sucursal ni configuraciones extra.</p>
+      </article>
+      <article class="card anim d5 p-7 relative overflow-hidden">
+        <div class="absolute -right-3 -top-3 text-7xl font-black pointer-events-none select-none" style="color:rgba(212,255,0,.05);">0</div>
+        <div class="flex items-start gap-4 mb-5">
+          <div class="icon-box"><svg width="20" height="20" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+          <div class="text-3xl font-black" style="color:var(--brand);">0</div>
+        </div>
+        <h3 class="text-base font-bold text-white mb-2">Fricción en el mostrador</h3>
+        <p class="text-sm text-white/40 leading-relaxed">El socio tiene su QR, su estado de cuenta y su historial en el portal. Menos preguntas en recepción, más tiempo para vender.</p>
+      </article>
+    </div>
+
+    <!-- CTA banner -->
+    <div class="anim mt-16 rounded-2xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6" style="background:linear-gradient(90deg, rgba(212,255,0,.08) 0%, rgba(212,255,0,.03) 100%); border:1px solid rgba(212,255,0,.18);">
+      <div>
+        <div class="text-sm font-bold mb-1" style="color:var(--brand);">Cada día cuenta.</div>
+        <h3 class="text-2xl font-black text-white">¿Cuánto dinero se te fue esta semana sin que te dieras cuenta?</h3>
+      </div>
+      <a href="#contacto" class="btn-p flex-shrink-0">Quiero ver cómo funciona</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  PRECIOS
+  ========================================================= -->
+<section id="precios" class="py-12 lg:py-12 bg-black grid-bg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-6">
+      <div class="chip anim inline-flex">
+        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Simple, justo y escalable
+      </div>
+      <h2 class="anim d1 mt-5 text-4xl sm:text-5xl font-black leading-tight">
+        Un solo pago mensual.<br><span style="color:var(--brand);">Todas las funciones.</span>
+      </h2>
+      <p class="anim d2 mt-4 text-white/50 text-lg max-w-xl mx-auto">
+        Elige el plan según la cantidad total de socios de tu centro deportivo. Sin importar el número de sucursales.
+      </p>
+    </div>
+
+    <!-- Grow note -->
+    <div class="flex justify-center mb-12 anim d3">
+      <div class="flex items-center gap-4 bg-[#111] border rounded-xl px-6 py-4 max-w-lg" style="border-color:rgba(212,255,0,.2);">
+        <div class="icon-box flex-shrink-0">
+          <svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div>
+          <div class="font-black text-sm" style="color:var(--brand);">CRECE SIN LÍMITES</div>
+          <div class="text-white/45 text-xs mt-0.5">Cuando superes el rango de tu plan, cámbialo en segundos. Sin penalizaciones.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plans -->
+    <div class="anim pricing-scroll -mx-4 px-4">
+      <!-- Plan 100 -->
+      <div class="plan-card">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[9px] font-black px-3 py-1 rounded-full whitespace-nowrap bg-white/10 border border-white/20 text-white">
+        </div>
+        <div class="flex justify-center mt-2"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 100</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">0 – 100 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$300</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold transition-all bg-white/8 border border-white/10 text-white hover:bg-white/15">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 200 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 200</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">101 – 200 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$600</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 300 RECOMENDADO -->
+      <div class="plan-card recommended relative">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 text-[9px] font-black px-3 py-1 rounded-full whitespace-nowrap" style="background:var(--brand);color:#000;">
+          <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/></svg>
+          RECOMENDADO
+        </div>
+        <div class="flex justify-center mt-2"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 300</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">201 – 300 socios</div></div>
+        <div class="text-center"><div class="font-black text-4xl" style="color:var(--brand);">$900</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold transition-all" style="background:var(--brand);color:#000;">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 400 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 400</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">301 – 400 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$1,200</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 500 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 500</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">401 – 500 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$1,500</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 600 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 600</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">501 – 600 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$1,800</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 700 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 700</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">601 – 700 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$2,100</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+
+      <!-- Plan 800 -->
+      <div class="plan-card">
+        <div class="flex justify-center mt-5"><div class="icon-box"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+        <div class="text-center"><div class="font-black text-white text-lg">Plan 800</div><div class="text-xs font-bold mt-0.5" style="color:var(--brand);">701 – 800 socios</div></div>
+        <div class="text-center"><div class="text-white font-black text-3xl">$2,400</div><div class="text-white/35 text-[11px]">MXN / mes</div></div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las funciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las integraciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Todas las actualizaciones</span></div>
+          <div class="flex items-center gap-1.5"><svg width="11" height="11" fill="none" stroke="var(--brand)" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-[11px] text-white/55">Soporte incluido</span></div>
+        </div>
+        <a href="#contacto" class="block text-center py-2.5 rounded-xl text-sm font-bold bg-white/8 border border-white/10 text-white hover:bg-white/15 transition-all">Comenzar ahora</a>
+      </div>
+    </div>
+
+    <p class="text-center text-white/25 text-xs mt-5 anim">Precios en MXN. Facturación mensual. Puedes cambiar de plan cuando lo necesites.</p>
+
+    <!-- Guarantees -->
+    <div class="mt-14 grid sm:grid-cols-2 lg:grid-cols-5 gap-4 anim">
+      <div class="card p-5 text-center">
+        <div class="icon-box mx-auto mb-3"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M18.364 5.636a9 9 0 1 1-12.728 0"/><path d="M12 2v4"/></svg></div>
+        <div class="text-white font-bold text-sm mb-1">Todas las funciones</div>
+        <div class="text-white/35 text-[11px] leading-relaxed">Acceso completo a la plataforma en cualquier plan.</div>
+      </div>
+      <div class="card p-5 text-center">
+        <div class="icon-box mx-auto mb-3"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="text-white font-bold text-sm mb-1">Sucursales ilimitadas</div>
+        <div class="text-white/35 text-[11px] leading-relaxed">Administra todas tus ubicaciones sin costo extra.</div>
+      </div>
+      <div class="card p-5 text-center">
+        <div class="icon-box mx-auto mb-3"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+        <div class="text-white font-bold text-sm mb-1">Actualizaciones sin costo</div>
+        <div class="text-white/35 text-[11px] leading-relaxed">Siempre tendrás acceso a las nuevas funciones sin costos extra.</div>
+      </div>
+      <div class="card p-5 text-center">
+        <div class="icon-box mx-auto mb-3"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="text-white font-bold text-sm mb-1">Soporte incluido</div>
+        <div class="text-white/35 text-[11px] leading-relaxed">Acompañamiento real cuando lo necesites.</div>
+      </div>
+      <div class="card p-5 text-center">
+        <div class="icon-box mx-auto mb-3"><svg width="18" height="18" fill="none" stroke="var(--brand)" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <div class="text-white font-bold text-sm mb-1">Tus datos seguros</div>
+        <div class="text-white/35 text-[11px] leading-relaxed">Con altos estándares de seguridad y siempre serán tuyos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  FAQ
+  ========================================================= -->
+<section id="faq" class="py-10 lg:py-6" style="background-color:#050505;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-3 gap-16">
+      <!-- Left -->
+      <div class="anim">
+        <div class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Preguntas frecuentes
+        </div>
+        <h2 class="mt-5 text-4xl font-black leading-tight">
+          Todo lo que<br>necesitas<br><span style="color:var(--brand);">saber.</span>
+        </h2>
+        <p class="mt-5 text-white/40 text-sm leading-relaxed">
+          Si tienes alguna pregunta que no está aquí, mándanos whats y la respondemos con gusto.
+        </p>
+        <a href="#contacto" class="btn-p mt-7 inline-flex text-sm">Mandar Whats</a>
+      </div>
+
+      <!-- Right: accordion -->
+      <div class="lg:col-span-2 space-y-3 anim d2">
+
+        <div class="acc-item open">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="true">
+            <span>¿Qué es Deport365?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Deport365 es la plataforma que centraliza clientes, membresías, cobros, accesos, servicios e indicadores de tu negocio deportivo. Todo en un solo lugar, para que dejes de operar con memoria y calculadora..</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Qué tipo de negocios pueden utilizar Deport365?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Está diseñado para gimnasios independientes, gimnasios con múltiples sucursales y centros deportivos como CrossFit, Box, Funcional, Artes marciales, Natación, Academias deportivas y Clubes deportivos en general.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Necesito conocimientos técnicos para utilizarlo?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">No. Administradores, recepcionistas y socios lo usan de forma intuitiva desde el primer día. Si sabes usar WhatsApp, sabes usar Deport365.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Puedo controlar el acceso de mis socios mediante códigos QR?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. Cada socio puede generar su propio código QR desde su portal y el sistema valida automáticamente si tiene un servicio vigente y el estado de su membresía antes de permitir el acceso.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿El sistema controla pagos vencidos?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. La plataforma te muestra en tiempo real quién está al corriente, quién debe, quién trae pagos parciales o vencidos, para que la cobranza deje de depender de la memoria.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Puedo administrar varias sucursales?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. Manejas todas tus sedes desde una sola plataforma y consultas indicadores por cada ubicación. Sin límite de sucursales ni costo adicional.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Cómo ayuda Deport365 a incrementar la rentabilidad de mi gimnasio?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Al centralizar la información de clientes, cobros y asistencia, obtienes indicadores que facilitan identificar oportunidades para aumentar ingresos, reducir la cartera vencida y mejorar la retención de socios.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Existen diferentes niveles de usuario?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. Existen perfiles para Administrador, Recepcionista y Socio. Cada perfil únicamente puede acceder a las funciones que le corresponden según su rol, garantizando seguridad y orden operativo.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Los socios tienen acceso a un portal propio?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. Cada socio puede consultar sus servicios activos, vigencias, estado de pagos, historial de accesos y generar su código QR desde cualquier dispositivo móvil.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Cuánto tiempo toma comenzar a utilizar Deport365?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Entregamos accesos en cuestión de horas. De ahí en fuera, la configuración depende del tamaño de tu operación, pero tu equipo puede estar operando el mismo día.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Puedo migrar desde otro sistema?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Sí. Nuestro equipo puede ayudarte a evaluar la migración de tu información hacia Deport365 para que no pierdas el historial de tu operación.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Deport365 es solo un sistema de control de acceso?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">No. El control de acceso es únicamente 1 de sus funciones. El verdadero valor está en ayudarte a administrar mejor tu operación mediante información que facilite la toma de decisiones: ingresos, cobranza, retención y crecimiento.</p></div></div></div>
+        </div>
+
+        <div class="acc-item">
+          <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+            <span>¿Puedo solicitar una demostración?</span>
+            <svg class="acc-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body"><div class="px-6 pb-5"><div class="border-t border-white/8 pt-4"><p class="text-sm text-white/50 leading-relaxed">Por supuesto que sí. Agenda una demostración gratuita y conoce cómo Deport365 puede ayudarte a tener mayor control sobre la operación de tu gimnasio o centro deportivo.</p></div></div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- =========================================================
+  CTA FINAL + FORMULARIO
+  ========================================================= -->
+<section id="contacto" class="py-10 lg:py-6 bg-black grid-bg relative overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none rounded-full" style="background:radial-gradient(circle, rgba(212,255,0,.06) 0%, transparent 70%);" aria-hidden="true"></div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-start">
+      <!-- Left -->
+      <div class="anim">
+        <div class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          Empieza hoy
+        </div>
+        <h2 class="mt-5 text-4xl sm:text-5xl font-black leading-tight">
+          ¿Listo para tener el<br>control total de tu<br>
+          <span style="color:var(--brand);">centro deportivo?</span>
+        </h2>
+        <p class="mt-5 text-white/50 text-lg leading-relaxed">
+          Mándanos Whats y mira cómo Deport365 le cambia el ritmo a tu operación. Sin compromisos, sin letra chiquita.
+        </p>
+        <ul class="mt-8 space-y-3">
+          <li class="flex items-center gap-3"><svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-white/65 text-sm">Demo personalizada sin compromiso</span></li>
+          <li class="flex items-center gap-3"><svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-white/65 text-sm">Configuración asistida desde el día uno</span></li>
+          <li class="flex items-center gap-3"><svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-white/65 text-sm">Soporte en todo momento</span></li>
+          <li class="flex items-center gap-3"><svg width="17" height="17" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span class="text-white/65 text-sm">Cambia de plan cuando lo necesites</span></li>
+        </ul>
+        <div class="mt-8 font-black text-lg italic" style="color:var(--brand);">"Cada día cuenta."</div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="anim d2">
+        <!-- Success state (hidden by default) -->
+        <div id="form-success" style="display:none;" class="bg-[#111] border rounded-2xl p-10 text-center" style2="border-color:rgba(212,255,0,.3);">
+          <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-5" style="background:rgba(212,255,0,.1);">
+            <svg width="30" height="30" fill="none" stroke="var(--brand)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="text-2xl font-black text-white mb-3">¡Solicitud recibida!</h3>
+          <p class="text-white/45 text-sm leading-relaxed">Nos pondremos en contacto contigo cuanto antes.</p>
+          <div class="mt-6 font-bold text-sm" style="color:var(--brand);">Cada día cuenta. Gracias por elegir Deport365.</div>
+        </div>
+
+        <!-- Form -->
+        <form id="cta-form" onsubmit="submitForm(event)" class="bg-[#111] border border-white/10 rounded-2xl p-8 space-y-5" novalidate>
+          <div>
+            <h3 class="text-xl font-black text-white mb-1">Mándanos Whats y te enseñamos cómo funciona</h3>
+            <p class="text-white/35 text-sm">Mereces ese Upgrade.</p>
+          </div>
+
+
+          <button type="submit" id="submit-btn" class="btn-p w-full justify-center py-4 text-base" style="border:none;">
+            <span id="btn-text">Subamos de nivel</span> <a href="https://wa.me/522411062154?text=Hola%20quiero%20más%20información%20del%20software%20para%20mi%20Gimnasio" target="_blank" class="btn-whatsapp">
+  Escríbenos por WhatsApp
+</a>
+            <svg id="btn-arrow" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <svg id="btn-spinner" style="display:none;" class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(0,0,0,0.25)" stroke-width="4"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#000" stroke-width="4" stroke-linecap="round"/></svg>
+          </button>
+          <p class="text-center text-white/20 text-xs">Al enviar, aceptas que nos comuniquemos contigo para coordinar la demo.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<!-- =========================================================
+  FOOTER
+  ========================================================= -->
+<footer class="border-t border-white/8" style="background:#050505;">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <!-- Brand -->
+      <div class="lg:col-span-2">
+        <img src="https://github.com/user-attachments/assets/2779d68e-a370-439e-b3c1-adf90145886f" alt="Deport365" class="h-10 w-auto mb-5" />
+        <p class="text-white/35 text-sm leading-relaxed max-w-xs">La plataforma que centraliza clientes, cobros, accesos y membresías para que tu gimnasio crezca con datos reales.</p>
+        <div class="mt-5 font-black text-sm italic" style="color:var(--brand);">Cada día cuenta.</div>
+      </div>
+      <!-- Nav -->
+      <div>
+        <div class="text-white/25 text-xs font-bold uppercase tracking-wider mb-4">Plataforma</div>
+        <nav class="space-y-3">
+          <a href="#funcionalidades" class="block text-sm text-white/45 hover:text-white transition-colors">Funcionalidades</a>
+          <a href="#perfiles" class="block text-sm text-white/45 hover:text-white transition-colors">Perfiles</a>
+          <a href="#beneficios" class="block text-sm text-white/45 hover:text-white transition-colors">Beneficios</a>
+          <a href="#precios" class="block text-sm text-white/45 hover:text-white transition-colors">Precios</a>
+          <a href="#faq" class="block text-sm text-white/45 hover:text-white transition-colors">FAQ</a>
+          <a href="#contacto" class="block text-sm text-white/45 hover:text-white transition-colors">Mandar Whats</a>
+        </nav>
+      </div>
+      <!-- Contact -->
+      <div>
+        <div class="text-white/25 text-xs font-bold uppercase tracking-wider mb-4">Contacto</div>
+        <div class="space-y-3">
+          <div class="text-sm text-white/45">josue.ayala@tech4grow.com.mx</div>
+          <div class="text-sm text-white/45">México</div>
+          <a href="#contacto" class="btn-p text-sm inline-flex mt-2">Mandar Whats</a>
+        </div>
+      </div>
+    </div>
+    <!-- Bottom -->
+    <div class="border-t border-white/8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-white/20 text-xs">&copy; 2026 Deport365. Todos los derechos reservados.</p>
+      <div class="flex gap-6">
+        <a href="#" class="text-white/20 text-xs hover:text-white/50 transition-colors">Aviso de Privacidad</a>
+        <a href="#" class="text-white/20 text-xs hover:text-white/50 transition-colors">Términos de Servicio</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- =========================================================
+  JAVASCRIPT
+  ========================================================= -->
+<script>
+  /* ---- NAVBAR scroll ---- */
+  window.addEventListener('scroll', function() {
+    var nav = document.getElementById('navbar');
+    if (window.scrollY > 40) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }, { passive: true });
+
+  /* ---- MOBILE MENU ---- */
+  var menuBtn = document.getElementById('menu-btn');
+  var mobileMenu = document.getElementById('mobile-menu');
+  var iconMenu = document.getElementById('icon-menu');
+  var iconClose = document.getElementById('icon-close');
+
+  menuBtn.addEventListener('click', function() {
+    var open = mobileMenu.classList.toggle('open');
+    iconMenu.style.display = open ? 'none' : 'inline-block';
+    iconClose.style.display = open ? 'inline-block' : 'none';
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+
+  document.querySelectorAll('.mobile-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      mobileMenu.classList.remove('open');
+      iconMenu.style.display = 'inline-block';
+      iconClose.style.display = 'none';
+      menuBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* ---- NAV LINKS smooth scroll ---- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var href = anchor.getAttribute('href');
+      if (href === '#') return;
+      var target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  /* ---- FEATURE TABS ---- */
+  function switchFeatureTab(btn, panelId) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      if (b.parentElement === btn.parentElement) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    ['feat-operacion','feat-cobranza','feat-accesos','feat-reportes'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    });
+    var target = document.getElementById(panelId);
+    if (target) {
+      target.classList.add('active');
+      // re-trigger animations
+      target.querySelectorAll('.anim').forEach(function(el) {
+        el.classList.remove('visible');
+        setTimeout(function() { el.classList.add('visible'); }, 50);
+      });
+    }
+  }
+
+  /* ---- PROFILE TABS ---- */
+  function switchProfileTab(btn, panelId) {
+    var parent = btn.parentElement;
+    parent.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    ['prof-admin','prof-recep','prof-socio'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('active');
+    });
+    var target = document.getElementById(panelId);
+    if (target) {
+      target.classList.add('active');
+      target.querySelectorAll('.anim').forEach(function(el) {
+        el.classList.remove('visible');
+        setTimeout(function() { el.classList.add('visible'); }, 50);
+      });
+    }
+  }
+
+  /* ---- ACCORDION ---- */
+  function toggleAcc(btn) {
+    var item = btn.closest('.acc-item');
+    var wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.acc-item').forEach(function(el) {
+      el.classList.remove('open');
+      el.querySelector('.acc-btn').setAttribute('aria-expanded', 'false');
+    });
+    if (!wasOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  /* ---- FORM SUBMIT ---- */
+  function submitForm(e) {
+    e.preventDefault();
+    var name = document.getElementById('inp-name').value.trim();
+    var email = document.getElementById('inp-email').value.trim();
+    var wa = document.getElementById('inp-wa').value.trim();
+    if (!name || !email || !wa) return;
+
+    var btn = document.getElementById('submit-btn');
+    var txt = document.getElementById('btn-text');
+    var arrow = document.getElementById('btn-arrow');
+    var spinner = document.getElementById('btn-spinner');
+    btn.disabled = true;
+    txt.textContent = 'Enviando...';
+    arrow.style.display = 'none';
+    spinner.style.display = 'inline-block';
+
+    setTimeout(function() {
+      document.getElementById('cta-form').style.display = 'none';
+      var success = document.getElementById('form-success');
+      success.style.display = 'block';
+      success.style.borderColor = 'rgba(212,255,0,.3)';
+    }, 1300);
+  }
+
+  /* ---- SCROLL ANIMATIONS ---- */
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  function observeAll() {
+    document.querySelectorAll('.anim').forEach(function(el) {
+      if (!el.classList.contains('visible')) observer.observe(el);
+    });
+  }
+  observeAll();
+  // Re-check after tab switches
+  setInterval(observeAll, 800);
+</script>
+
+</body>
+</html>
